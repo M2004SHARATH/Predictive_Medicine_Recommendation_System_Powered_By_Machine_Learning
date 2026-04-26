@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}Contact Us{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-10">
+        <div class="card shadow-lg p-4 mb-5">
+            <h1 class="text-center text-primary mb-4"><i class="fas fa-headset"></i> Get In Touch</h1>
+            <p class="lead text-center">Have questions or need assistance? We're here to help! We value your feedback and are committed to providing you with the best possible experience.</p>
+            
+            <hr class="my-4">
+
+            <div class="row">
+                <div class="col-md-6 mb-4">
+                    <h4 class="text-success"><i class="fas fa-phone-alt me-2"></i> Contact Details</h4>
+                    <p>Our dedicated customer support team is available to assist you with any inquiries or issues you may have.</p>
+                    
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item"><i class="fas fa-envelope me-2 text-primary"></i> <strong>Email:</strong> sharathm1401@gmail.com</li>
+                        <li class="list-group-item"><i class="fas fa-mobile-alt me-2 text-primary"></i> <strong>Phone:</strong>8310860092</li>
+                        <li class="list-group-item"><i class="fas fa-map-marker-alt me-2 text-primary"></i> <strong>Location:</strong>Sharath M , Gopala,Shimoga</li>
+                    </ul>
+                    
+                    <h5 class="mt-4 text-primary"><i class="fas fa-share-alt me-2"></i> Stay Connected</h5>
+                    <p>Stay up-to-date with the latest news, updates, and health tips by following us on social media.</p>
+                    <a href="#" class="btn btn-primary me-2"><i class="fab fa-facebook-f"></i> Facebook</a>
+                    <a href="#" class="btn btn-danger"><i class="fab fa-instagram"></i> Instagram</a>
+                </div>
+
+                <div class="col-md-6 mb-4">
+                    <h4 class="text-info"><i class="fas fa-paper-plane me-2"></i> Send us a Message</h4>
+                    <form>
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Your Name</label>
+                            <input type="text" class="form-control" id="name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email Address</label>
+                            <input type="email" class="form-control" id="email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="message" class="form-label">Message</label>
+                            <textarea class="form-control" id="message" rows="4" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-info w-100"><i class="fas fa-comment-dots me-2"></i> Submit Inquiry</button>
+                        <div class="form-text mt-2 text-center">
+                            Note: This form is for illustration. The actual submission process requires backend setup.
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

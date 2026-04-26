@@ -1,0 +1,172 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-10 text-center mb-5 animate-fade-in">
+        <h1 class="display-4 fw-bold text-primary mb-3">Health Check AI</h1>
+        <p class="lead text-muted">Select your symptoms below to get an AI-powered health assessment, precautions, and medication recommendations.</p>
+    </div>
+
+    <div class="col-lg-10 animate-fade-in" style="animation-delay: 0.2s;">
+        <div class="custom-card p-4">
+            <form action="/predict" method="post">
+                <h3 class="mb-4 text-center border-bottom pb-2" style="color: var(--dark-blue);">
+                    <i class="fas fa-stethoscope me-2"></i> Select Symptoms
+                </h3>
+                
+                <div class="accordion" id="symptomAccordion">
+                    {% for category, symptoms in categorized_symptoms.items() %}
+                    <div class="accordion-item border-0 mb-2 shadow-sm rounded overflow-hidden">
+                        <h2 class="accordion-header" id="heading{{ loop.index }}">
+                            <button class="accordion-button collapsed fw-semibold text-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ loop.index }}" aria-expanded="false">
+                                {{ category }}
+                            </button>
+                        </h2>
+                        <div id="collapse{{ loop.index }}" class="accordion-collapse collapse" data-bs-parent="#symptomAccordion">
+                            <div class="accordion-body bg-light">
+                                <div class="row">
+                                    {% for symptom in symptoms %}
+                                    <div class="col-md-4 col-sm-6 mb-2">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="symptoms" value="{{ symptom }}" id="{{ symptom }}">
+                                            <label class="form-check-label text-capitalize" for="{{ symptom }}">
+                                                {{ symptom.replace('_', ' ') }}
+                                            </label>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <div class="text-center mt-5">
+                    <button type="submit" class="btn btn-medical btn-lg w-50">
+                        <i class="fas fa-search-plus me-2"></i> Predict Condition
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% if predicted_disease %}
+<div class="modal fade" id="resultModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content border-0 shadow-lg">
+      
+      <div class="modal-header {% if is_emergency %}bg-danger{% else %}bg-primary{% endif %} text-white">
+        <h5 class="modal-title fw-bold">
+            {% if is_emergency %}
+                <i class="fas fa-ambulance me-2"></i> EMERGENCY ALERT
+            {% else %}
+                <i class="fas fa-notes-medical me-2"></i> Prediction Result
+            {% endif %}
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body p-4">
+        
+        <div class="text-center mb-4">
+            <h2 class="fw-bold {% if is_emergency %}text-danger{% else %}text-primary{% endif %}">
+                {{ predicted_disease }}
+            </h2>
+            
+            {% if is_emergency %}
+                <div class="alert alert-danger shadow-sm mt-3 animate-pulse border-danger border-2">
+                    <h5 class="fw-bold"><i class="fas fa-exclamation-triangle"></i> IMMEDIATE ACTION REQUIRED</h5>
+                    <p class="mb-2">This condition is classified as a medical emergency. Please visit a doctor immediately.</p>
+                    
+                    <div class="d-grid gap-2 col-md-8 mx-auto mt-3">
+                        <a href="https://www.google.com/maps/search/hospitals+near+me" target="_blank" class="btn btn-danger btn-lg fw-bold">
+                            <i class="fas fa-map-marker-alt me-2"></i> FIND NEAREST HOSPITALS
+                        </a>
+                    </div>
+                    <small class="text-muted d-block mt-2">* Click to open Google Maps with nearby hospitals.</small>
+                </div>
+            {% endif %}
+
+            <p class="text-muted fst-italic mt-3 fs-5">{{ dis_des }}</p>
+        </div>
+
+        <div class="row g-3">
+            <div class="col-md-6">
+                <div class="card h-100 border-primary border-opacity-25 bg-light">
+                    <div class="card-header bg-transparent fw-bold text-primary">
+                        <i class="fas fa-shield-alt me-2"></i> Precautions
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        {% for i in my_precautions %}
+                            <li class="list-group-item bg-transparent text-capitalize">
+                                <i class="fas fa-check text-success me-2"></i> {{ i }}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card h-100 border-info border-opacity-25 bg-light">
+                    <div class="card-header bg-transparent fw-bold text-info">
+                        <i class="fas fa-pills me-2"></i> Medications
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        {% for i in medications %}
+                            <li class="list-group-item bg-transparent text-capitalize">{{ i }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card h-100 border-success border-opacity-25 bg-light">
+                    <div class="card-header bg-transparent fw-bold text-success">
+                        <i class="fas fa-apple-alt me-2"></i> Recommended Diet
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        {% for i in my_diet %}
+                            <li class="list-group-item bg-transparent text-capitalize">{{ i }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card h-100 border-warning border-opacity-25 bg-light">
+                    <div class="card-header bg-transparent fw-bold text-warning">
+                        <i class="fas fa-running me-2"></i> Lifestyle / Workout
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        {% for i in workout %}
+                            <li class="list-group-item bg-transparent text-capitalize">{{ i }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+      </div>
+      <div class="modal-footer bg-light">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" onclick="window.print()">Print Report</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+
+<style>
+/* Pulse Animation for Emergency Alert */
+@keyframes pulse-red {
+    0% { box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.7); }
+    70% { box-shadow: 0 0 0 10px rgba(220, 53, 69, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(220, 53, 69, 0); }
+}
+.animate-pulse {
+    animation: pulse-red 2s infinite;
+}
+</style>
+{% endblock %}

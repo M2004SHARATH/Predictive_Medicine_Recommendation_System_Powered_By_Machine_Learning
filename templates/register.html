@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center align-items-center" style="min-height: 70vh;">
+    <div class="col-md-5 col-lg-4 animate-fade-in">
+        <div class="custom-card p-5">
+            <div class="text-center mb-4">
+                <div class="bg-success text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                    <i class="fas fa-user-plus fa-lg"></i>
+                </div>
+                <h3 class="fw-bold text-success">Create Account</h3>
+            </div>
+
+            <form method="POST" action="">
+                {{ form.hidden_tag() }}
+                <div class="mb-3">
+                    {{ form.username.label(class="form-label fw-semibold") }}
+                    {% if form.username.errors %}
+                        {{ form.username(class="form-control is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.username.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.username(class="form-control") }}
+                    {% endif %}
+                </div>
+                <div class="mb-3">
+                    {{ form.password.label(class="form-label fw-semibold") }}
+                    {% if form.password.errors %}
+                        {{ form.password(class="form-control is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.password.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.password(class="form-control") }}
+                    {% endif %}
+                </div>
+                <div class="mb-4">
+                    {{ form.confirm_password.label(class="form-label fw-semibold") }}
+                    {% if form.confirm_password.errors %}
+                        {{ form.confirm_password(class="form-control is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.confirm_password.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.confirm_password(class="form-control") }}
+                    {% endif %}
+                </div>
+                <div class="d-grid">
+                    {{ form.submit(class="btn btn-success rounded-pill") }}
+                </div>
+            </form>
+            <div class="text-center mt-3">
+                <small>Already have an account? <a href="{{ url_for('login') }}" class="text-success fw-bold">Login</a></small>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

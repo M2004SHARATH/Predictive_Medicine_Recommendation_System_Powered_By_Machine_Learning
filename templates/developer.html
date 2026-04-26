@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}Developer Profile{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-10">
+        <div class="card shadow-lg p-4 mb-5">
+            <div class="text-center mb-4">
+                <i class="fas fa-laptop-code fa-5x text-primary mb-3"></i>
+                <h1 class="text-primary">Meet Rindu,Sharath,Samarath,Sharmada</h1>
+                <h3 class="text-secondary">Your Computer Science Engineer</h3>
+            </div>
+            
+            <p class="lead text-center">Hello, As a team we are passionate about harnessing the power of technology to make a positive impact on people's lives.</p>
+            
+            <hr class="my-4">
+
+            <div class="row g-4">
+                
+                <div class="col-md-6">
+                    <div class="card h-100 border-info">
+                        <div class="card-body">
+                            <h4 class="card-title text-info"><i class="fas fa-star me-2"></i> Expertise</h4>
+                            <p class="card-text">With a strong academic background in computer science and a deep fascination for AI and ML, we embarked our  journey that has taken us across the globe, working on diverse and innovative projects. Over the years, we had the privilege of collaborating on international projects that have pushed the boundaries of what's possible in AI and ML.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="card h-100 border-success">
+                        <div class="card-body">
+                            <h4 class="card-title text-success"><i class="fas fa-handshake me-2"></i> Commitment to Excellence</h4>
+                            <p class="card-text">Our work is driven by a commitment to excellence and a belief that technology should be accessible and beneficial to everyone. Whether it's developing predictive models, creating intelligent algorithms, or designing user-friendly interfaces, I strive for solutions that are both cutting-edge and user-centric.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <div class="card border-primary">
+                        <div class="card-body">
+                            <h4 class="card-title text-primary"><i class="fas fa-heartbeat me-2"></i> Passion for Health Tech</h4>
+                            <p class="card-text">The development of this Health Predictor represents a convergence of our passion for AI and our dedication to improving healthcare accessibility.We believe that AI has the potential to transform the way we approach healthcare, making it more personalized and informative.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mt-5">
+                <a href="{{ url_for('contact') }}" class="btn btn-primary btn-lg"><i class="fas fa-envelope me-2"></i> Connect with Me</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
