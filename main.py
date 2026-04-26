@@ -22,7 +22,7 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your_super_secret_key_change_this_later'
 
 # Configure the SQLite database
-app.config['SQLALCHEMY_DATABASE_URI'] = ''sqlite:///' + os.path.join(BASE_DIR, 'users.db')'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(BASE_DIR, 'users.db')
 db = SQLAlchemy(app)
 
 # Configure Flask-Login
