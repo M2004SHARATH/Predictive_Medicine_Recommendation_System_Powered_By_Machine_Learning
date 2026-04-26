@@ -13,18 +13,16 @@ from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import DataRequired, Length, EqualTo
 
 # ==============================================================================
-# ✅ BASE DIRECTORY (IMPORTANT FOR RENDER)
+# BASE DIRECTORY (IMPORTANT)
 # ==============================================================================
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 # ==============================================================================
-# 1. APP CONFIG
+# APP CONFIG
 # ==============================================================================
 app = Flask(__name__)
-
 app.config['SECRET_KEY'] = 'change_this_secret_key'
 
-# SQLite path fix for Render
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(BASE_DIR, 'users.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -34,14 +32,14 @@ login_manager = LoginManager(app)
 login_manager.login_view = 'login'
 
 # ==============================================================================
-# 2. CONTEXT PROCESSOR
+# CONTEXT PROCESSOR
 # ==============================================================================
 @app.context_processor
 def inject_now():
     return {'now': datetime.datetime.now()}
 
 # ==============================================================================
-# 3. DATABASE MODELS
+# DATABASE MODELS
 # ==============================================================================
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -60,7 +58,7 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 # ==============================================================================
-# 4. FORMS
+# FORMS
 # ==============================================================================
 class RegistrationForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired(), Length(min=4, max=20)])
@@ -74,18 +72,17 @@ class LoginForm(FlaskForm):
     submit = SubmitField('Login')
 
 # ==============================================================================
-# 5. LOAD DATA (FIXED PATHS)
+# LOAD DATA
 # ==============================================================================
 try:
     DATASET_DIR = os.path.join(BASE_DIR, "datasets")
     MODEL_DIR = os.path.join(BASE_DIR, "models")
 
-    sym_des = pd.read_csv(os.path.join(DATASET_DIR, "symtoms_df.csv"))
-    precautions = pd.read_csv(os.path.join(DATASET_DIR, "precautions_df.csv"))
-    workout = pd.read_csv(os.path.join(DATASET_DIR, "workout_df.csv"))
     description = pd.read_csv(os.path.join(DATASET_DIR, "description.csv"))
+    precautions = pd.read_csv(os.path.join(DATASET_DIR, "precautions_df.csv"))
     medications = pd.read_csv(os.path.join(DATASET_DIR, "medications.csv"))
     diets = pd.read_csv(os.path.join(DATASET_DIR, "diets.csv"))
+    workout = pd.read_csv(os.path.join(DATASET_DIR, "workout_df.csv"))
 
     svc = pickle.load(open(os.path.join(MODEL_DIR, "svc.pkl"), "rb"))
 
@@ -93,10 +90,19 @@ except Exception as e:
     print("❌ Error loading files:", e)
 
 # ==============================================================================
-# 6. SYMPTOMS & DISEASE LIST
+# SYMPTOMS + DISEASES (USE YOUR FULL DICT HERE)
 # ==============================================================================
-symptoms_dict = {'itching': 0, 'skin_rash': 1, 'nodal_skin_eruptions': 2, 'continuous_sneezing': 3}
-diseases_list = {0: 'Fungal infection', 1: 'Allergy', 2: 'GERD'}
+symptoms_dict = {
+    'itching': 0,
+    'skin_rash': 1,
+    'continuous_sneezing': 2
+}
+
+diseases_list = {
+    0: 'Fungal infection',
+    1: 'Allergy',
+    2: 'Common Cold'
+}
 
 categorized_symptoms = {
     "General": ['itching', 'skin_rash', 'continuous_sneezing']
@@ -105,7 +111,7 @@ categorized_symptoms = {
 EMERGENCY_DISEASES = {'Heart attack', 'Pneumonia'}
 
 # ==============================================================================
-# 7. HELPER FUNCTIONS
+# HELPER FUNCTIONS
 # ==============================================================================
 def helper(dis):
     try:
@@ -132,7 +138,7 @@ def get_predicted_value(patient_symptoms):
         return "Unknown condition"
 
 # ==============================================================================
-# 8. ROUTES
+# ROUTES
 # ==============================================================================
 @app.route("/")
 def index():
@@ -207,8 +213,26 @@ def logout():
     logout_user()
     return redirect(url_for('index'))
 
+# ---------------- STATIC PAGES (FIXED YOUR ERROR) ---------------- #
+
+@app.route('/about')
+def about():
+    return render_template("about.html")
+
+@app.route('/contact')
+def contact():
+    return render_template("contact.html")
+
+@app.route('/developer')
+def developer():
+    return render_template("developer.html")
+
+@app.route('/blog')
+def blog():
+    return render_template("blog.html")
+
 # ==============================================================================
-# 9. RUN APP
+# RUN APP
 # ==============================================================================
 if __name__ == "__main__":
     with app.app_context():
