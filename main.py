@@ -14,7 +14,7 @@ import datetime # <-- Added for Jinja context processor
 # ==============================================================================
 # 1. APP & DATABASE CONFIGURATION
 # ==============================================================================
-
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 # Initialize the Flask App
 app = Flask(__name__)
 
