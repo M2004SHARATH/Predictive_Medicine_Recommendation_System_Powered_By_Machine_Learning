@@ -90,7 +90,7 @@ MODEL_DIR = os.path.join(BASE_DIR, "models")
 # Load all necessary CSV files
 try:
     # NOTE: You must have 'datasets/' and 'models/' directories with these files
-     sym_des = pd.read_csv(os.path.join(DATASET_DIR, "symtoms_df.csv"))
+    sym_des = pd.read_csv(os.path.join(DATASET_DIR, "symtoms_df.csv"))
     precautions = pd.read_csv(os.path.join(DATASET_DIR, "precautions_df.csv"))
     workout = pd.read_csv(os.path.join(DATASET_DIR, "workout_df.csv"))
     description = pd.read_csv(os.path.join(DATASET_DIR, "description.csv"))
