@@ -1,4 +1,3 @@
-import os
 from flask import Flask, request, render_template, redirect, url_for, flash
 import numpy as np
 import pandas as pd
@@ -14,7 +13,7 @@ import datetime # <-- Added for Jinja context processor
 # ==============================================================================
 # 1. APP & DATABASE CONFIGURATION
 # ==============================================================================
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
 # Initialize the Flask App
 app = Flask(__name__)
 
@@ -22,7 +21,7 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your_super_secret_key_change_this_later'
 
 # Configure the SQLite database
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(BASE_DIR, 'users.db')
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
 db = SQLAlchemy(app)
 
 # Configure Flask-Login
@@ -83,21 +82,17 @@ class LoginForm(FlaskForm):
 # ==============================================================================
 # 5. LOAD DATASETS, MODEL & DEFINE SYMPTOM DATA
 # ==============================================================================
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-DATASET_DIR = os.path.join(BASE_DIR, "datasets")
-MODEL_DIR = os.path.join(BASE_DIR, "models")
 # Load all necessary CSV files
 try:
     # NOTE: You must have 'datasets/' and 'models/' directories with these files
-    sym_des = pd.read_csv(os.path.join(DATASET_DIR, "symtoms_df.csv"))
-    precautions = pd.read_csv(os.path.join(DATASET_DIR, "precautions_df.csv"))
-    workout = pd.read_csv(os.path.join(DATASET_DIR, "workout_df.csv"))
-    description = pd.read_csv(os.path.join(DATASET_DIR, "description.csv"))
-    medications = pd.read_csv(os.path.join(DATASET_DIR, "medications.csv"))
-    diets = pd.read_csv(os.path.join(DATASET_DIR, "diets.csv"))
-
-    svc = pickle.load(open(os.path.join(MODEL_DIR, "svc.pkl"), "rb"))
+    sym_des = pd.read_csv("datasets/symtoms_df.csv")
+    precautions = pd.read_csv("datasets/precautions_df.csv")
+    workout = pd.read_csv("datasets/workout_df.csv")
+    description = pd.read_csv("datasets/description.csv")
+    medications = pd.read_csv('datasets/medications.csv')
+    diets = pd.read_csv("datasets/diets.csv")
+    svc = pickle.load(open('models/svc.pkl', 'rb'))
 except FileNotFoundError as e:
     print(f"Error loading data or model: {e}")
     # Use dummy data/model if files are missing for development, but stop execution for production
@@ -146,20 +141,17 @@ def helper(dis):
 
 
 def get_predicted_value(patient_symptoms):
-    if svc is None:
-        return "Model not loaded"
-
+    """Predicts the disease based on symptoms."""
     input_vector = np.zeros(len(symptoms_dict))
-
     for item in patient_symptoms:
         if item in symptoms_dict:
             input_vector[symptoms_dict[item]] = 1
-
+    # Use a try-except block in case of an unexpected prediction index
     try:
-        pred = svc.predict([input_vector])[0]
-        return diseases_list.get(pred, "Unknown condition")
-    except:
-        return "Prediction error"
+        prediction_index = svc.predict([input_vector])[0]
+        return diseases_list.get(prediction_index, "Unknown condition")
+    except Exception:
+        return "Unknown condition"
 
 # ==============================================================================
 # 7. APP ROUTES
