@@ -21,7 +21,7 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 # APP CONFIG
 # ==============================================================================
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'change_this_secret_key'
+app.config['SECRET_KEY'] = '34c4d1df0dd9c033222e18094354c66373002cf81d4246c108615b91038b37b8'
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(BASE_DIR, 'users.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
